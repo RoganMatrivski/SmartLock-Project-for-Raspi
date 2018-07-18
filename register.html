@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+		<script src="script.js"></script>
+        <link rel="stylesheet" href="style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8"> 
+	</head>
+
+	<body>
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a href="main.html" class="navbar-brand">
+                <i class="fas fa-lock mx-2"></i>
+                SmartLock Control Panel
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown active">
+                    <a href="#" class="nav-link dropdown-toggle mr-4" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-tie mx-2"></i>
+                        Admin
+                    </a>
+                    <div class="dropdown-menu nooverflow" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="register.html">Register User</a>
+                        <a class="dropdown-item" href="delete.html">Delete User</a>
+                        <div class="dropdown-divider"></div>
+                        <p class="dropdown-item disabled">Modify User [UNUSABLE]</p>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="main.html" class="nav-link mr-4">
+                        <i class="fas fa-sliders-h mx-2"></i>
+                        Control Panel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="users.html" class="nav-link mr-4">
+                        <i class="fas fa-users mx-2"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="logs.html" class="nav-link mr-4">
+                        <i class="fas fa-clipboard-list mx-2"></i>
+                        Logs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="logout" class="nav-link mr-4">
+                        <i class="fas fa-sign-out-alt mx-2"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+		<div class="container">
+            <div class="my-4">
+                <div class="mb-4">
+                    <h1 class="h3 mb-3 font-weight-normal">Register User</h1>
+                    <form action="register.php" method="POST" name="register" id="register">
+                        <label for="inputId" class="sr-only">ID</label>
+                        <input type="text" class="form-control" id="id" name="id" placeholder="ID">
+                        <label for="inputPwd" class="sr-only">Password</label>
+                        <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+                        <select class="form-control" name="role" id="role">
+                            <option value="Admin">Admin</option>
+                            <option value="Superuser">Superuser</option>
+                            <option value="User">User</option>
+                        </select>
+                        <button id="btn-submit" type="submit" class="btn btn-primary btn-large btn-block mt-4">Register</button>
+                        <!-- <button id="modal" type="button" data-toggle="modal" data-target="#testmodal" class="btn btn-primary btn-large btn-block mt-4">Test Modal</button> -->
+                    </form>
+                    <div class="alert alert-danger alert-dismissible fade show mt-4">
+                        <i class="fas fa-exclamation-triangle mr-2"></i><strong>Warning!</strong> Please Remember that <strong>we are not storing your password in the database.</strong> If you lost your password, it's gone forever.
+                    </div>
+                    <div class="alert alert-warning alert-dismissible fade show mt-4">
+                        <i class="fas fa-exclamation-triangle mr-2"></i><strong>Warning!</strong> The role feature was implemented, but it stopped halfway due to limited resources. So it's not functional. We're sorry for your inconvenience.
+                    </div>
+                    <div class="modal fade" data-backdrop="static" data-keyboard="false" id="waitmodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <button type="button" class="close disabled" data-dismiss="modal" disabled>&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Please Wait...</p>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="successmodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Success!</p>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="">
+                    <h2 class="mb-4">Users</h2>
+                    <table class="table table-hover my-2" id="users">
+                        <thead>
+                            <tr>
+                                <th scope="col">Index</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            var cookie = Cookies.get("id")	
+            if (!cookie)
+            {
+                window.location.href = "main.html";
+            }
+            function required()
+            {
+                var id = document.forms["register"]["id"].value;
+                var pw = document.forms["register"]["pwd"].value;
+
+                if (id == "" || pw == "")
+                {
+                    alert("Both ID and Password is needed.");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            function updateTable()
+            {
+                var postreq = $.post("getuserlist.php", function(data, status)
+                {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    
+                    var parsed = JSON.parse(data);
+
+                    //testTable = $("#users").htmlson({
+                    //    data: parsed,
+                    //});
+
+                    $("#users").DataTable({
+                        //ajax: data,
+                        data: parsed,
+                        paging: false,
+                        searching:false,
+                        autoWidth:true,
+                        columns:
+                        [
+                            {data: "INDEX"},
+                            {data: "ID"},
+                            {data: "ROLE"}
+                        ]
+                    });
+                })
+                .fail(function() {
+                    //do stuff when failed
+                })
+                .always(function() {
+                    //do stuff when completed universally. (will always runned regardless of the state of success.)
+                });
+            }
+                
+            $("document").ready(function()
+            {
+                $("#logout").click(function()
+                {
+                    Cookies.remove("id");
+                    location.reload();
+                });
+
+                updateTable();
+
+                $("#register").submit(function(event)
+				{
+					event.preventDefault();
+					if (required())
+						{
+                        $('#waitmodal').modal('show'); 
+						//alert("Submitting");
+						var formdata = 
+						{
+							"id"			: $("input[name=id]").val().toUpperCase(),
+                            "pwd"			: $("input[name=pwd]").val(),
+                            "role"          : $('#role').children("option:selected").text().toUpperCase()
+						};
+
+						$.ajax({
+							type			: "POST",
+							url				: "register.php",
+							data			: formdata,
+							dataType		: "JSON",
+							encode			: true
+						})
+						.done(function(data, status){
+							//alert("Done.");
+							var reply = JSON.parse(data);
+							if (!reply)
+							{
+                                alert("Failed to Register! \n" + reply)
+							}
+							else
+							{
+                                $('#waitmodal').modal('hide');
+                                $('#successmodal').modal('show');
+                                //alert("Success!");
+                                setTimeout(function()
+                                {
+                                    location.reload();
+                                }, 2000)
+							}
+                        });
+                        event.preventDefault();
+					};
+                })
+            });
+        </script>
+    </body>
+</html>

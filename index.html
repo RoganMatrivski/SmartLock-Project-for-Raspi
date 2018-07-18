@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+		<script src="script.js"></script>
+        <link rel="stylesheet" href="style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8"> 
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="modal fade" data-backdrop="static" data-keyboard="false" id="waitmodal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<div class="modal-header">
+							<button type="button" class="close disabled" data-dismiss="modal" disabled>&times;</button>
+						</div>
+
+						<div class="modal-body">
+							<p>Please Wait...</p>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade show" id="welcome">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+
+						<div class="modal-header">
+							<h4>Thanks for visiting!</h4>
+							<button type="button" class="close disabled" data-dismiss="modal">&times;</button>
+						</div>
+
+						<div class="modal-body">
+							<p>This website is a (near) perfect version of the Raspberry Pi version. It was created originally for my project at university.</p>
+							<p>To be fair, this website have A LOT OF BUGS AND VULNERABILITY. So please don't put any of your important credentials here. And for script kiddies, see if you can crack this one. Anyway, enjoy!</p>
+							<p>Use this credential for the login page.</p>
+							<div class="form-inline">
+								<label for="idText">Admin : </label>
+								<input type="text" class="form-control ml-2" value="Admin" readonly>
+								<label for="idText" class="ml-2">Password : </label>
+								<input type="text" class="form-control ml-2" value="Password" readonly>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+			
+			<!-- <div class="card mx-auto" style="width: 50">
+				<div class="card-header">
+					<h5 class="card-title text-center">Switch Control Panel</h5>
+				</div>
+				<div class="card-body" id="cards">
+					
+					<form action="login.php" method="POST" name="login" id="login">
+						<input type="text" class="form-control" id="id" name="id" placeholder="ID">
+						<input type="text" class="form-control" id="pwd" name="pwd" placeholder="Password">
+						<button id="btn-submit" type="submit" class="btn btn-primary mt-4">Login</button>
+					</form>
+				</div>
+			</div> -->
+
+			<div class="vertical-center">
+				<div class="text-center form-signin displayblock">
+					<i class="fa fa-lock big-icon mx-2"></i>
+					<h1 class="h3 mb-3 font-weight-normal">SmartLock Control Panel</h1>
+					<form action="login.php" method="POST" name="login" id="login">
+						<label for="inputId" class="sr-only">ID</label>
+						<input type="text" class="form-control" id="id" name="id" placeholder="ID">
+						<label for="inputPwd" class="sr-only">Password</label>
+						<input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+						<button id="btn-submit" type="submit" class="btn btn-primary btn-large btn-block mt-4">Login</button>
+						<p class="mt-5 mb-3 text-muted">© 2017-2018 <a href="http://roganmatrivski.github.io">Rogan Matrivski Lartengalf</a></p>
+					</form>
+				</div>
+			</div>
+				
+
+			<!-- <div class="card my-5" style="width: 50">
+				<div class="card-header">
+					<h5 class="card-title text-center">Register</h5>
+				</div>
+				<div class="card-body" id="cards">
+					<form action="register.php" method="POST" name="register" onsubmit="required()">
+						<input type="text" class="form-control" id="id" name="id" placeholder="ID">
+						<input type="text" class="form-control" id="pwd" name="pwd" placeholder="Password">
+						<button type="submit" class="btn btn-primary my-2">Login</button>
+					</form>
+				</div>
+			</div> -->
+		</div>
+
+		<script type="text/javascript">	
+			$('#welcome').modal('show');
+			var cookie = Cookies.get("id")	
+			if (cookie)
+			{
+				$('#waitmodal').modal('show');
+				window.location.href = "main.html";
+			}
+
+			function required()
+			{
+				var id = document.forms["register"]["id"].value;
+				var pw = document.forms["register"]["pwd"].value;
+
+				if (id == "" || pw == "")
+				{
+					alert("Both ID and Password is needed.");
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+
+			function loginrequired()
+			{
+				var id = document.forms["login"]["id"].value;
+				var pw = document.forms["login"]["pwd"].value;
+
+				if (id == "" || pw == "")
+				{
+					alert("Both ID and Password is needed.");
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+
+			$("document").ready(function(){
+				
+				/*
+				function createtoken() {
+					var text = "";
+					var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+					
+					for (var i = 0; i < 128; i++)
+						text += possible.charAt(Math.floor(Math.random() * possible.length));
+					
+					return text;
+				}
+				
+				var tokencookies = Cookies.get("logintoken");
+
+				if (tokencookies)
+				
+				alert(Cookies.get("id"));
+				Cookies.remove("id");
+				Cookies.set("id", $("input[name=id]").val(), {expires : 1, path: "index.html"});
+				*/
+
+				$("#login").submit(function(event)
+				{
+					if (loginrequired())
+						{
+						$('#waitmodal').modal('show'); 
+						//alert("Submitting");
+						var formdata = 
+						{
+							"id"			: $("input[name=id]").val().toUpperCase(),
+							"pwd"			: $("input[name=pwd]").val()
+						};
+
+						$.ajax({
+							type			: "POST",
+							url				: "login.php",
+							data			: formdata,
+							dataType		: "JSON",
+							encode			: true
+						})
+						.done(function(data, status){
+							var reply = data;
+							if (!reply)
+							{
+								alert("Incorrect ID or Password!");
+							}
+							else
+							{
+								//alert(Cookies.get("id"));
+								Cookies.remove("id");
+								Cookies.set("id", $("input[name=id]").val().toUpperCase(), {expires : 1});
+								window.location.href = "main.html";
+							}
+
+							$('#waitmodal').modal('hide'); 
+						});
+					};
+					event.preventDefault();
+				})
+			})
+
+		</script>
+	</body>
+</html>

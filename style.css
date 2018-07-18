@@ -1,0 +1,27 @@
+.form-signin{
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.displayblock{
+    display: block;
+}
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
+.big-icon{
+    font-size: 100px;
+    margin-bottom: 20px;
+}
+
+.nooverflow{
+    overflow: auto;
+}

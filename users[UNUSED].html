@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="script.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8"> 
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a href="#" class="navbar-brand">SmartLock Control Panel</a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link mx-4">Control Panel</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="#" class="nav-link mx-4">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link mx-4">Log</a>
+                </li>
+            </ul>
+        </nav>
+
+        <table class="table table-hover my-2">
+            <thead>
+                <tr>
+                    <th scope="col">Index</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Users</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="test()">Delete</button>
+                        <button class="btn btn-danger" id="asd">sbasd</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <script>
+                var cookie = Cookies.get("id")	
+                if (!cookie)
+                {
+                    window.location.href = "index.html";
+                }
+            $("#asd").click(function()
+            {
+                var aaaaa = $.post("test.php", function(data, status)
+                {
+                    alert("Data: " + data + "\nStatus: " + status)
+                })
+                .fail(function() {
+                    //do stuff when failed
+                })
+                .always(function() {
+                    //do stuff when completed universally. (will always runned regardless of the state of success.)
+                });
+            });
+        </script>
+    </body>
+
+    
+</html>

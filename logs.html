@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+        <script src="script.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8"> 
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a href="main.html" class="navbar-brand">
+                <i class="fas fa-lock mx-2"></i>
+                SmartLock Control Panel
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown active">
+                    <a href="#" class="nav-link dropdown-toggle mr-4" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-tie mx-2"></i>
+                        Admin
+                    </a>
+                    <div class="dropdown-menu nooverflow" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="register.html">Register User</a>
+                        <a class="dropdown-item" href="delete.html">Delete User</a>
+                        <div class="dropdown-divider"></div>
+                        <p class="dropdown-item disabled">Modify User [UNUSABLE]</p>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="main.html" class="nav-link mr-4">
+                        <i class="fas fa-sliders-h mx-2"></i>
+                        Control Panel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="users.html" class="nav-link mr-4">
+                        <i class="fas fa-users mx-2"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="logs.html" class="nav-link mr-4">
+                        <i class="fas fa-clipboard-list mx-2"></i>
+                        Logs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="logout" class="nav-link mr-4">
+                        <i class="fas fa-sign-out-alt mx-2"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="container">
+            <table class="table table-hover my-2" id="logs">
+                <thead>
+                    <!-- <tr>
+                        <th scope="col">Index</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Actions</th>
+                    </tr> -->
+                    <tr>
+                        <th>NO</th>
+                        <th>TIME</th>
+                        <th>USER</th>
+                        <th>ACTION</th>
+                        <th>RESULT</th>
+                        <!-- <th>MODIFY</th> -->
+                    </tr>
+                </thead>
+                <!-- <tbody>
+    
+                </tbody> -->
+            </table>
+        </div>
+
+        <script>
+            var cookie = Cookies.get("id")	
+            if (!cookie)
+            {
+                window.location.href = "index.html";
+            }
+            $("document").ready(function()
+            {
+                $("#logout").click(function()
+                {
+                    Cookies.remove("id");
+                    location.reload();
+                });
+                
+                var postreq = $.post("log.php", function(data, status)
+                {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    
+                    var parsed = JSON.parse(data);
+                    console.log(data);
+                    console.log(parsed);
+                
+                    //testTable = $("#users").htmlson({
+                    //    data: parsed,
+                    //});
+                
+                    $("#logs").DataTable({
+                        //ajax: data,
+                        data: parsed,
+                        paging: false,
+                        searching:false,
+                        order: [[0, "desc"]],
+                        autoWidth:true,
+                        columns:
+                        [
+                            {data: "NO"},
+                            {data: "TIME"},
+                            {data: "USER"},
+                            {data: "ACTION"},
+                            {data: "RESULT"},
+                            //{data: null, render: function ( data, type, row ) {console.log(row.id);return row.id;}}
+                        ]
+                    });
+                })
+                //$("#users").DataTable({
+                //    paging: false,
+                //    ajax: {url: "log.php", type:"POST"}
+                //});
+            });
+        </script>
+    </body>
+
+    
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js"></script>
+        <script src="script.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8"> 
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a href="#" class="navbar-brand">
+                <i class="fas fa-lock mx-2"></i>
+                SmartLock Control Panel
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown active">
+                    <a href="#" class="nav-link dropdown-toggle mr-4" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-tie mx-2"></i>
+                        Admin
+                    </a>
+                    <div class="dropdown-menu nooverflow" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="register.html">Register User</a>
+                        <a class="dropdown-item" href="delete.html">Delete User</a>
+                        <div class="dropdown-divider"></div>
+                        <p class="dropdown-item disabled">Modify User [UNUSABLE]</p>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="main.html" class="nav-link mr-4">
+                        <i class="fas fa-sliders-h mx-2"></i>
+                        Control Panel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="users.html" class="nav-link mr-4">
+                        <i class="fas fa-users mx-2"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="logs.html" class="nav-link mr-4">
+                        <i class="fas fa-clipboard-list mx-2"></i>
+                        Logs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="logout" class="nav-link mr-4">
+                        <i class="fas fa-sign-out-alt mx-2"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <div class="">
+                <div class="card-deck mx-auto my-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title text-center">Lock No. 1</h5>
+                        </div>
+                        <div class="card-body" id="cards">
+                            <form action="login.php" method="POST" name="register" onsubmit="return required()">
+                                <p id="status-text" class="card-text">Status : UNLOCKED</p>
+                                <div class="btn-group btn-group-justified">
+                                    <a id="unlock" href="#" class="btn btn-warning">
+                                        <i class="fas fa-unlock mx-2"></i>
+                                        UNLOCK
+                                    </a>
+                                    <a id="lock" href="#" class="btn btn-success">
+                                        <i class="fas fa-lock mx-2"></i>
+                                        LOCK
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var cookie = Cookies.get("id")	
+            if (!cookie)
+            {
+                window.location.href = "index.html";
+            }
+
+            $(document).ready(function(){
+                var aaaaa = $.post("check.php", function(data, status)
+                {
+                    //alert("Data: " + data + "\"\nStatus: " + status)
+                    var text = data.replace(/(\r\n\t|\n|\r\t)/gm,"");
+                    if (text == "True")
+                    {
+                        //alert("asdasdasd");
+                        $("#status-text").text("STATUS : LOCKED");
+                        $("#lock").addClass("disabled");
+                    }
+                    else
+                    {
+                        $("#status-text").text("STATUS : UNLOCKED");
+                        $("#unlock").addClass("disabled");
+                    }
+                })
+                .fail(function() {
+                    //do stuff when failed
+                })
+                .always(function() {
+                    //do stuff when completed universally. (will always runned regardless of the state of success.)
+                });
+
+                $("#lock").click(function()
+                {
+                    var id = Cookies.get("id");
+                    var aaaaa = $.post("lock.php", {id: id}, function(data, status)
+                    {
+                        //alert("Data: " + data + "\nStatus: " + status)
+                        $("#status-text").text("STATUS : LOCKED");
+                        $("#lock").addClass("disabled");
+                        $("#unlock").removeClass("disabled");
+                    })
+                    .fail(function() {
+                        //do stuff when failed
+                    })
+                    .always(function() {
+                        //do stuff when completed universally. (will always runned regardless of the state of success.)
+                    });
+                });
+
+                $("#unlock").click(function()
+                {
+                    var id = Cookies.get("id");
+                    var aaaaa = $.post("unlock.php", {id: id}, function(data, status)
+                    {
+                        //alert("Data: " + data + "\nStatus: " + status)
+                        $("#status-text").text("STATUS : UNLOCKED");
+                        $("#unlock").addClass("disabled");
+                        $("#lock").removeClass("disabled");
+                    })
+                    .fail(function() {
+                        //do stuff when failed
+                    })
+                    .always(function() {
+                        //do stuff when completed universally. (will always runned regardless of the state of success.)
+                    });
+                });
+
+                $("#logout").click(function()
+                {
+                    Cookies.remove("id");
+                    location.reload();
+                });
+            });
+        </script>
+    </body>
+</html>

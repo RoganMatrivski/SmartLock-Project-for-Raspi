@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+        <script src="script.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8"> 
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a href="#" class="navbar-brand">
+                <i class="fas fa-lock mx-2"></i>
+                SmartLock Control Panel
+            </a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown active">
+                    <a href="#" class="nav-link dropdown-toggle mr-4" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-tie mx-2"></i>
+                        Admin
+                    </a>
+                    <div class="dropdown-menu nooverflow" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="register.html">Register User</a>
+                        <a class="dropdown-item" href="delete.html">Delete User</a>
+                        <div class="dropdown-divider"></div>
+                        <p class="dropdown-item disabled">Modify User [UNUSABLE]</p>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="main.html" class="nav-link mr-4">
+                        <i class="fas fa-sliders-h mx-2"></i>
+                        Control Panel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="users.html" class="nav-link mr-4">
+                        <i class="fas fa-users mx-2"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="logs.html" class="nav-link mr-4">
+                        <i class="fas fa-clipboard-list mx-2"></i>
+                        Logs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="logout" class="nav-link mr-4">
+                        <i class="fas fa-sign-out-alt mx-2"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="container">
+            <div class="my-4">
+                <div class="mb-4">
+                    <h1 class="h3 mb-3 font-weight-normal">Delete User</h1>
+                    <form action="delete.php" method="POST" name="delete" id="delete">
+                        <label for="selectID" class="sr-only">ID</label>
+                        <select class="form-control" name="ID" id="ID">
+                            <option value="">ID GOES HERE</option>
+                        </select>
+                        <button id="btn-submit" type="submit" class="btn btn-danger btn-large btn-block mt-4">Delete</button>
+                        <!-- <button id="modal" type="button" data-toggle="modal" data-target="#testmodal" class="btn btn-primary btn-large btn-block mt-4">Test Modal</button> -->
+                    </form>
+                    <div class="modal fade" id="warningmodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <p class="modal-title">WARNING!</p>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body" >
+                                    <p id="warningtext">You're about to delete USER from the database!</p>
+                                    <p>Are you sure?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" id="confirmdel">Yes!</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" data-backdrop="static" data-keyboard="false" id="waitmodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <button type="button" class="close disabled" data-dismiss="modal" disabled>&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Please Wait...</p>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="successmodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Success!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="errormodal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <p class="modal-title">ERROR!</p>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p id="status">Can't delete the only ID!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var dropdown = $("#ID");
+
+            dropdown.empty();
+
+            $("#confirmdel").click(function()
+            {
+                var formData = {
+                    "id"          : $('#ID').children("option:selected").text()
+                }
+                
+                $.ajax(
+                    {
+                        url         : "delete.php",
+                        type        : "POST",
+                        data        : formData,
+                        success     :   function(data)
+                                        {
+                                            var parsed = JSON.parse(data);
+
+                                            if (parsed){
+                                                $('#warningmodal').modal('hide');
+                                                $('#successmodal').modal('show');
+                                                //alert("Success!");
+                                                setTimeout(function()
+                                                {
+                                                    location.reload();
+                                                }, 2000)
+                                            }
+                                        }
+                    }
+                )
+                
+            });
+
+            $("#btn-submit").click(function()
+            {
+                event.preventDefault(); 
+                if ($("#ID option").length > 1)
+                {
+                    $('#warningmodal').modal('show'); 
+                    $('#warningtext').text("You're about to delete " + $('#ID').children("option:selected").text() + " from the database!");
+                }
+                else
+                {
+                    $('#errormodal').modal('show');
+                }
+            });
+
+            var postreq = $.post("getUsers.php", function(data, status)
+            {
+                //alert("Data: " + data + "\nStatus: " + status);
+                
+                var parsed = JSON.parse(data);
+
+                $.each(parsed, function(key, value)
+                {
+                    //alert(value);
+                    dropdown.append($("<option></option>").attr("value", value).text(value));
+                })
+            });
+        </script>
+    </body>
+</html>
