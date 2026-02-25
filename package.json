@@ -20,7 +20,7 @@
     "moment": "^2.22.2"
   },
   "devDependencies": {
-    "eslint": "^5.0.1",
+    "eslint": "^10.0.2",
     "eslint-config-google": "^0.9.1"
   },
   "scripts": {
