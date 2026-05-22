@@ -15,7 +15,7 @@
     "dynatable": "0.0.7",
     "jquery": "^3.3.1",
     "jquery-form": "^4.2.2",
-    "js-cookie": "^2.2.0",
+    "js-cookie": "^3.0.7",
     "jshint": "^2.9.5",
     "moment": "^2.22.2"
   },
